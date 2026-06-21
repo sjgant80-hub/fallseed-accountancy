@@ -1,0 +1,11 @@
+{
+  "name": "fallseed-accountancy",
+  "level": 0,
+  "parent": "fallseed-hr",
+  "prime": 1051,
+  "meshChannel": "fall-accountancy",
+  "spec": "https://www.ai-nativesolutions.com/spec.html",
+  "licence": "MIT",
+  "seal": "◊·κ=1",
+  "updatedAt": "2026-06-21"
+}
