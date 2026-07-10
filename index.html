@@ -159,22 +159,19 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
     'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
     'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
     'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
-    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' },
-  };
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' }};
   const DEFAULT_MODEL = 'llama-3b';
 
   const T3_PROVIDERS = {
     anthropic: { label: 'Anthropic Claude', models: ['claude-sonnet-4-5','claude-opus-4-7','claude-haiku-4-5'], default: 'claude-sonnet-4-5', url: 'https://api.anthropic.com/v1/messages' },
     openai:    { label: 'OpenAI',           models: ['gpt-4o','gpt-4o-mini','o1-mini'],                          default: 'gpt-4o-mini',      url: 'https://api.openai.com/v1/chat/completions' },
-    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' },
-  };
+    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' }};
 
   // ─── State ───────────────────────────────────────────────────────
   const STATE = {
     config: loadConfig(),
     ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
-    mesh: { active: false, peers: new Map(), bc: null, signal: null },
-  };
+    mesh: { active: false, peers: new Map(), bc: null, signal: null }};
 
   function loadConfig() {
     try { return JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); }
@@ -241,8 +238,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
     if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
       const r = await STATE.ai.engine.chat.completions.create({
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMsg }],
-        max_tokens: maxTokens,
-      });
+        max_tokens: maxTokens});
       return r.choices[0].message.content;
     }
     if (tier === 'T3' && STATE.config.api_key && STATE.config.api_provider) {
@@ -259,8 +255,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
       const r = await fetch(T3_PROVIDERS.anthropic.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200));
       const j = await r.json();
       return j.content[0].text;
@@ -269,8 +264,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
       const r = await fetch(T3_PROVIDERS.openai.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
-        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('OpenAI ' + r.status);
       const j = await r.json();
       return j.choices[0].message.content;
@@ -279,8 +273,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
       const r = await fetch(T3_PROVIDERS.google.url + model + ':generateContent?key=' + encodeURIComponent(key), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } }),
-      });
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } })});
       if (!r.ok) throw new Error('Google ' + r.status);
       const j = await r.json();
       return j.candidates[0].content.parts[0].text;
@@ -521,8 +514,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
     openMint: openMint,  // v1.2 · launch kcc-mint with this seed prefilled as parent
     MODELS: WEBLLM_MODELS,
     PROVIDERS: T3_PROVIDERS,
-    state: STATE,
-  };
+    state: STATE};
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -589,16 +581,16 @@ const SEED_DEFAULT = {
  t0Rules: [
  { pattern: 'icaew|acca|aat|cima|code of ethics', answer: 'Professional body codes (ICAEW / ACCA / CIMA / AAT) — five fundamental principles: integrity, objectivity, professional competence & due care, confidentiality, professional behaviour. Conceptual framework for threats & safeguards.' },
  { pattern: 'aml|mlr|supervisor', answer: 'AML / MLR 2017: supervisor (ICAEW / ACCA / HMRC). CDD on every client. EDD for high-risk. SAR to NCA. MLRO appointed. Annual firm-wide risk assessment.' },
- { pattern: 'sa100|self.?assess', answer: 'Self Assessment (SA100): online filing deadline 31 January following tax year. Initial £100 late-filing penalty; £10/day after 3 months; further at 6 + 12 months.' },
+ { pattern: 'sa100|self.?assess', answer: 'Self Assessment (SA100): online filing deadline 31 January following tax year. Initial TBA late-filing penalty; TBA/day after 3 months; further at 6 + 12 months.' },
  { pattern: 'ct600|corporation tax', answer: 'CT600: 12 months after end of accounting period to file. Tax payment 9 months and 1 day after end of accounting period (instalments for large / very large companies).' },
- { pattern: 'vat|mtd', answer: 'VAT: registration threshold £90,000 (from 1 Apr 2024). Quarterly returns via MTD-compatible software (mandatory since 1 Apr 2022 for all VAT-registered).' },
+ { pattern: 'vat|mtd', answer: 'VAT: registration threshold TBA (from 1 Apr 2024). Quarterly returns via MTD-compatible software (mandatory since 1 Apr 2022 for all VAT-registered).' },
  { pattern: 'paye|rti|fps|eps', answer: 'PAYE / RTI: FPS on or before each payday. EPS by 19th of following month. P60 by 31 May. P11D by 6 July. Class 1A NIC by 22 July.' },
  { pattern: 'psc|persons with significant control', answer: 'PSC register: identify Persons with Significant Control (>25% shares / votes / right to appoint, or significant influence). File at Companies House; update within 14 days.' },
  { pattern: 'cs01|confirmation statement', answer: 'Confirmation statement (CS01) annually to Companies House within 14 days of due date (PSC + capital + members + SIC at confirmation date).' },
  { pattern: 'directors|ca 2006|s\\.?17[1-7]', answer: 'Companies Act 2006 ss.171-177 — directors’ duties: act within powers; promote success of company; independent judgment; reasonable care, skill & diligence; avoid conflicts; not accept third-party benefits; declare interest in proposed transactions.' },
- { pattern: 'mtd itsa', answer: 'MTD ITSA: Income Tax Self-Assessment mandatory from 6 April 2026 for self-employed / landlords with qualifying income > £50,000; from 6 April 2027 > £30,000; from 6 April 2028 > £20,000 (per Autumn Statement 2024).' },
+ { pattern: 'mtd itsa', answer: 'MTD ITSA: Income Tax Self-Assessment mandatory from 6 April 2026 for self-employed / landlords with qualifying income > TBA; from 6 April 2027 > TBA; from 6 April 2028 > TBA (per Autumn Statement 2024).' },
  { pattern: 'basis period|tax year', answer: 'Basis period reform: from 2024/25 sole traders / partnerships report on tax-year basis (was current-year-basis to 2022/23; 2023/24 was transition year).' },
- { pattern: 'senior accounting officer|sao', answer: 'SAO regime: companies with turnover > £200m OR balance sheet > £2bn (alone or in group) must appoint Senior Accounting Officer; personal £5,000 penalty for failure.' }
+ { pattern: 'senior accounting officer|sao', answer: 'SAO regime: companies with turnover > TBAm OR balance sheet > TBAbn (alone or in group) must appoint Senior Accounting Officer; personal TBA penalty for failure.' }
  ],
  complianceItems: [
  'Professional body practising certificate in force',
@@ -694,7 +686,7 @@ const PROVIDERS = [
  model: 'claude-sonnet-4-20250514', requiresKey: true, paid: true, defaultEnabled: false, supportsStream: true,
  pricePer1MIn: 3, pricePer1MOut: 15,
  signupUrl: 'https://console.anthropic.com/',
- note: 'Sonnet 4: ~£0.03/tool · highest quality codegen' }
+ note: 'Sonnet 4: ~TBA/tool · highest quality codegen' }
 ];
 
 // ═══════════════════════════════════════════════════════════════
